@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Page card style
+.page-card {
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+// Table toolbar
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.table-toolbar__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+// Pagination
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
