@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus, Delete } from '@element-plus/icons-vue'
 import { getUserTags, getTagValue, writeTagValue, deleteTagValue } from '@/api/tagValue'
 import { pageTagDefinitions } from '@/api/tagDefinition'
+import { TagType } from '@/types/api'
 import type { TagDefinitionDTO, TagValueWriteRequest } from '@/types/api'
 
 // --- Search ---
@@ -89,10 +90,25 @@ const writeFormRules = {
 
 const writeFormRef = ref()
 
+const selectedTag = computed<TagDefinitionDTO | undefined>(() =>
+  tagOptions.value.find((t) => t.tagKey === writeForm.tagKey),
+)
+
+const enumSelected = ref<string[]>([])
+
+watch(
+  () => writeForm.tagKey,
+  () => {
+    writeForm.tagValue = ''
+    enumSelected.value = []
+  },
+)
+
 async function openWriteDialog() {
   writeForm.userId = currentUserId.value || ''
   writeForm.tagKey = ''
   writeForm.tagValue = ''
+  enumSelected.value = []
   writeDialogVisible.value = true
 
   // Load tag definitions for dropdown
@@ -112,7 +128,11 @@ async function handleWriteSubmit() {
 
   submitting.value = true
   try {
-    await writeTagValue({ ...writeForm })
+    const payload: TagValueWriteRequest = { ...writeForm }
+    if (selectedTag.value?.tagType === TagType.ENUM) {
+      payload.tagValue = enumSelected.value.join(',')
+    }
+    await writeTagValue(payload)
     ElMessage.success('写入成功')
     writeDialogVisible.value = false
     // Refresh if same user
@@ -196,7 +216,63 @@ async function handleWriteSubmit() {
           </el-select>
         </el-form-item>
         <el-form-item label="标签值" prop="tagValue">
-          <el-input v-model="writeForm.tagValue" placeholder="输入标签值" />
+          <!-- ENUM: multi-select from predefined values -->
+          <el-select
+            v-if="selectedTag?.tagType === TagType.ENUM"
+            v-model="enumSelected"
+            multiple
+            filterable
+            placeholder="选择枚举值"
+            style="width: 100%"
+            @change="writeForm.tagValue = enumSelected.join(',')"
+          >
+            <el-option
+              v-for="ev in selectedTag.enumValues"
+              :key="ev"
+              :label="ev"
+              :value="ev"
+            />
+          </el-select>
+
+          <!-- DATE: date-time picker -->
+          <el-date-picker
+            v-else-if="selectedTag?.tagType === TagType.DATE"
+            v-model="writeForm.tagValue"
+            type="datetime"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            placeholder="选择日期时间"
+            style="width: 100%"
+          />
+
+          <!-- BOOLEAN: true / false select -->
+          <el-select
+            v-else-if="selectedTag?.tagType === TagType.BOOLEAN"
+            v-model="writeForm.tagValue"
+            placeholder="选择布尔值"
+            style="width: 100%"
+          >
+            <el-option label="true" value="true" />
+            <el-option label="false" value="false" />
+          </el-select>
+
+          <!-- LONG: integer input -->
+          <el-input
+            v-else-if="selectedTag?.tagType === TagType.LONG"
+            v-model="writeForm.tagValue"
+            type="number"
+            placeholder="输入整数"
+          />
+
+          <!-- DOUBLE: decimal input -->
+          <el-input
+            v-else-if="selectedTag?.tagType === TagType.DOUBLE"
+            v-model="writeForm.tagValue"
+            type="number"
+            placeholder="输入浮点数"
+          />
+
+          <!-- STRING / default: text input -->
+          <el-input v-else v-model="writeForm.tagValue" placeholder="输入标签值" />
         </el-form-item>
       </el-form>
 
