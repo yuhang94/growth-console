@@ -20,6 +20,42 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/profile/TagValueQuery.vue'),
         meta: { title: '标签值查询', breadcrumb: ['画像管理', '标签值查询'] },
       },
+      {
+        path: 'segments',
+        name: 'Segments',
+        component: () => import('@/views/profile/SegmentList.vue'),
+        meta: { title: '人群分层', breadcrumb: ['画像管理', '人群分层'] },
+      },
+      {
+        path: 'event-definitions',
+        name: 'EventDefinitions',
+        component: () => import('@/views/profile/EventDefinitionList.vue'),
+        meta: { title: '事件定义', breadcrumb: ['画像管理', '事件定义'] },
+      },
+      {
+        path: 'behavior-events',
+        name: 'BehaviorEvents',
+        component: () => import('@/views/profile/BehaviorEventQuery.vue'),
+        meta: { title: '行为事件', breadcrumb: ['画像管理', '行为事件'] },
+      },
+      {
+        path: 'segment-templates',
+        name: 'SegmentTemplates',
+        component: () => import('@/views/profile/SegmentTemplateList.vue'),
+        meta: { title: '业务模板', breadcrumb: ['画像管理', '业务模板'] },
+      },
+      {
+        path: 'campaign-events',
+        name: 'CampaignEvents',
+        component: () => import('@/views/campaign/CampaignEventManagement.vue'),
+        meta: { title: '事件管理', breadcrumb: ['事件管理'] },
+      },
+      {
+        path: 'campaigns',
+        name: 'Campaigns',
+        component: () => import('@/views/campaign/CampaignManagement.vue'),
+        meta: { title: '活动管理', breadcrumb: ['营销管理', '活动管理'] },
+      },
     ],
   },
 ]

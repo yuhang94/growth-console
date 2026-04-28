@@ -7,6 +7,11 @@ import {
   Search,
   Fold,
   Expand,
+  User,
+  DataLine,
+  List,
+  Files,
+  Promotion,
 } from '@element-plus/icons-vue'
 
 const route = useRoute()
@@ -50,6 +55,38 @@ function handleMenuSelect(index: string) {
           <el-menu-item index="/tags/values">
             <el-icon><Search /></el-icon>
             <span>标签值查询</span>
+          </el-menu-item>
+          <el-menu-item index="/segments">
+            <el-icon><User /></el-icon>
+            <span>人群分层</span>
+          </el-menu-item>
+          <el-menu-item index="/behavior-events">
+            <el-icon><DataLine /></el-icon>
+            <span>行为事件</span>
+          </el-menu-item>
+          <el-menu-item index="/segment-templates">
+            <el-icon><Files /></el-icon>
+            <span>业务模板</span>
+          </el-menu-item>
+        </el-sub-menu>
+        <el-sub-menu index="event">
+          <template #title>
+            <el-icon><List /></el-icon>
+            <span>事件管理</span>
+          </template>
+          <el-menu-item index="/campaign-events">
+            <el-icon><List /></el-icon>
+            <span>事件管理</span>
+          </el-menu-item>
+        </el-sub-menu>
+        <el-sub-menu index="campaign">
+          <template #title>
+            <el-icon><Promotion /></el-icon>
+            <span>营销管理</span>
+          </template>
+          <el-menu-item index="/campaigns">
+            <el-icon><Promotion /></el-icon>
+            <span>活动管理</span>
           </el-menu-item>
         </el-sub-menu>
       </el-menu>
